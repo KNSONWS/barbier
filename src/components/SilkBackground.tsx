@@ -106,37 +106,13 @@ export function SilkBackground({
       return
     }
 
-    const program = gl.createProgram()!
-    gl.attachShader(program, compile(gl, gl.VERTEX_SHADER, VERTEX))
-    gl.attachShader(program, compile(gl, gl.FRAGMENT_SHADER, FRAGMENT))
-    gl.linkProgram(program)
-    if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
-      canvas.style.display = 'none'
-      return
-    }
-    gl.useProgram(program)
-
-    // Ein Dreieck, das den ganzen Viewport abdeckt
-    const buffer = gl.createBuffer()
-    gl.bindBuffer(gl.ARRAY_BUFFER, buffer)
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW)
-    const position = gl.getAttribLocation(program, 'position')
-    gl.enableVertexAttribArray(position)
-    gl.vertexAttribPointer(position, 2, gl.FLOAT, false, 0, 0)
-
-    const u = (name: string) => gl.getUniformLocation(program, name)
-    const uTime = u('uTime')
-    const uAspect = u('uAspect')
-    const uPointer = u('uPointer')
-    gl.uniform3fv(u('uColor'), hexToRgb(color))
-    gl.uniform1f(u('uSpeed'), speed)
-    gl.uniform1f(u('uScale'), scale)
-    gl.uniform1f(u('uRotation'), rotation)
-    gl.uniform1f(u('uNoiseIntensity'), noiseIntensity)
-
-    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
     // Seide ist weich — eine niedrigere Auflösung sieht gleich aus und spart Akku
     const dpr = Math.min(window.devicePixelRatio || 1, 1.25)
+    let program: WebGLProgram | null = null
+    let buffer: WebGLBuffer | null = null
+    let uTime: WebGLUniformLocation | null = null
+    let uAspect: WebGLUniformLocation | null = null
+    let uPointer: WebGLUniformLocation | null = null
 
     const resize = () => {
       const { clientWidth: w, clientHeight: h } = canvas
@@ -145,7 +121,47 @@ export function SilkBackground({
       gl.viewport(0, 0, canvas.width, canvas.height)
       gl.uniform1f(uAspect, w / Math.max(1, h))
     }
-    resize()
+
+    // Programm und Geometrie anlegen — auch erneut, falls der Browser den WebGL-Kontext zurücksetzt
+    const setup = () => {
+      program = gl.createProgram()
+      const vs = compile(gl, gl.VERTEX_SHADER, VERTEX)
+      const fs = compile(gl, gl.FRAGMENT_SHADER, FRAGMENT)
+      gl.attachShader(program, vs)
+      gl.attachShader(program, fs)
+      gl.linkProgram(program)
+      gl.deleteShader(vs)
+      gl.deleteShader(fs)
+      if (!gl.getProgramParameter(program, gl.LINK_STATUS)) return false
+      gl.useProgram(program)
+
+      // Ein Dreieck, das den ganzen Viewport abdeckt
+      buffer = gl.createBuffer()
+      gl.bindBuffer(gl.ARRAY_BUFFER, buffer)
+      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW)
+      const position = gl.getAttribLocation(program, 'position')
+      gl.enableVertexAttribArray(position)
+      gl.vertexAttribPointer(position, 2, gl.FLOAT, false, 0, 0)
+
+      const u = (name: string) => gl.getUniformLocation(program!, name)
+      uTime = u('uTime')
+      uAspect = u('uAspect')
+      uPointer = u('uPointer')
+      gl.uniform3fv(u('uColor'), hexToRgb(color))
+      gl.uniform1f(u('uSpeed'), speed)
+      gl.uniform1f(u('uScale'), scale)
+      gl.uniform1f(u('uRotation'), rotation)
+      gl.uniform1f(u('uNoiseIntensity'), noiseIntensity)
+      resize()
+      return true
+    }
+
+    if (!setup()) {
+      canvas.style.display = 'none'
+      return
+    }
+    canvas.style.display = ''
+
     const ro = new ResizeObserver(resize)
     ro.observe(canvas)
 
@@ -157,8 +173,10 @@ export function SilkBackground({
     }
     window.addEventListener('pointermove', onPointer, { passive: true })
 
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
     let raf = 0
     let visible = true
+    let lost = false
     let elapsed = 0
     let last = performance.now()
 
@@ -178,7 +196,7 @@ export function SilkBackground({
     }
 
     const start = () => {
-      if (reduceMotion || raf || !visible || document.hidden) return
+      if (reduceMotion || raf || lost || !visible || document.hidden) return
       last = performance.now()
       raf = requestAnimationFrame(loop)
     }
@@ -200,13 +218,31 @@ export function SilkBackground({
     const onVisibility = () => (document.hidden ? stop() : start())
     document.addEventListener('visibilitychange', onVisibility)
 
+    const onLost = (e: Event) => {
+      e.preventDefault() // erlaubt dem Browser, den Kontext wiederherzustellen
+      lost = true
+      stop()
+    }
+    const onRestored = () => {
+      lost = false
+      if (!setup()) return
+      draw(performance.now())
+      start()
+    }
+    canvas.addEventListener('webglcontextlost', onLost)
+    canvas.addEventListener('webglcontextrestored', onRestored)
+
     return () => {
       stop()
       ro.disconnect()
       io.disconnect()
       window.removeEventListener('pointermove', onPointer)
       document.removeEventListener('visibilitychange', onVisibility)
-      gl.getExtension('WEBGL_lose_context')?.loseContext()
+      canvas.removeEventListener('webglcontextlost', onLost)
+      canvas.removeEventListener('webglcontextrestored', onRestored)
+      // Ressourcen freigeben, den Kontext aber behalten (React Strict Mode mountet im Dev-Modus zweimal)
+      gl.deleteBuffer(buffer)
+      gl.deleteProgram(program)
     }
   }, [color, speed, scale, rotation, noiseIntensity])
 

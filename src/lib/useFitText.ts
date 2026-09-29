@@ -22,9 +22,23 @@ export function useFitText<T extends HTMLElement>(max = 400) {
 
     fit()
     document.fonts?.ready.then(fit)
-    const ro = new ResizeObserver(fit)
+
+    let frame = 0
+    let lastWidth = parent.clientWidth
+    const ro = new ResizeObserver(() => {
+      // Höhenänderungen entstehen durch die Schriftgröße selbst — nur auf neue Breiten reagieren
+      const width = parent.clientWidth
+      if (width === lastWidth) return
+      lastWidth = width
+      // außerhalb der Observer-Runde anpassen, sonst meldet der Browser eine Resize-Schleife
+      cancelAnimationFrame(frame)
+      frame = requestAnimationFrame(fit)
+    })
     ro.observe(parent)
-    return () => ro.disconnect()
+    return () => {
+      cancelAnimationFrame(frame)
+      ro.disconnect()
+    }
   }, [max])
 
   return ref
