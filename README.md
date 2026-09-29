@@ -25,15 +25,19 @@ npm run preview  # Build lokal ansehen
 | Was | Wo |
 | --- | --- |
 | Preise, Dauer, Leistungen, Öffnungszeiten, Team, Kontakt | `src/data/salon.ts` |
-| Fotos (Hero, Über uns, Menü, Fotoraster) | `src/assets/photos/*.webp` |
+| Fotos (Hero, Über uns, Menü) | `src/assets/photos/*.webp` |
 | Team-Porträts | `src/assets/team/*.webp` |
 | Schriftzug oben in der Mitte | `src/components/Nav.tsx` |
 | Favicon, App-Icon, Vorschaubild zum Teilen | `public/` |
 | Impressum & Datenschutz | `impressum.html`, `datenschutz.html` |
 
-**Fotos:** Hero, „Über uns“ und Menü nutzen die Fotos von der Logo-Wand im Salon (Setmore-Seite). Für den
-Hero lohnt sich ein eigenes, hochauflösendes Foto (mind. 2400 px breit), z. B. ein Barber bei der Arbeit.
-Einfach `salon-wand.webp` bzw. `salon-wand-800.webp` ersetzen.
+**Hero:** Amin bei der Arbeit (per Bild-KI erstellt), abgelegt als `hero.webp` (2000 px), `hero-1000.webp`
+und `hero-mobile.webp` (Hochformat-Ausschnitt fürs Handy). Die Headline steht unten links, damit Gesichter,
+Schere und Kamm frei bleiben. Beim Austauschen alle drei Dateien ersetzen, den Handy-Ausschnitt so wählen,
+dass Gesicht und Hände darin liegen. `hero-detail.webp` (Hände mit Schere und Kamm) erscheint im Menü.
+
+**Salon-Fotos:** „Über uns“ und der Menüpunkt „Kontakt“ zeigen das Logo an der Wand im Salon
+(`emblem.webp`, `emblem-breit-900.webp`, aus den Fotos der Setmore-Seite).
 
 **Team-Porträts:** Einheitliche Studio-Porträts (per Bild-KI aus den Originalfotos erstellt), je zweimal
 abgelegt: `name.webp` (1000 px breit, Team-Liste) und `name-thumb.webp` (320 × 320, Fotoraster und
@@ -48,7 +52,8 @@ Setmore-Seite hinter `products=`.
 - [ ] Platzhalter in `impressum.html` und `datenschutz.html` ausfüllen (`[…]`) und rechtlich prüfen lassen
 - [ ] Domain in `.env` bei `VITE_SITE_URL` eintragen (für das Vorschaubild bei WhatsApp/Facebook)
 - [ ] Rollen im Team prüfen (`src/data/salon.ts`)
-- [ ] Einverständnis des Teams für die Verwendung der Fotos einholen
+- [ ] Einverständnis des Teams für die Verwendung der Fotos einholen (Porträts und Hero sind KI-Bilder
+      nach echten Fotos – vor der Veröffentlichung freigeben lassen)
 
 Der Live-Status „Jetzt geöffnet“ rechnet mit den Öffnungszeiten aus `src/data/salon.ts` und
 kennt keine Feiertage.

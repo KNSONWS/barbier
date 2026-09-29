@@ -1,15 +1,16 @@
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
-import { BOOKING_URL, image, salon } from '../data/salon'
+import { BOOKING_URL, image, salon, team } from '../data/salon'
 import { cn } from '../lib/cn'
 import { EASE_OUT_EXPO } from '../lib/motion'
 import { scrollToHash, unlockScroll } from '../lib/scroll'
 import { GridLines } from './GridLines'
 
+// Ein Bild oder – beim Team – ein 3 × 2 Raster aus allen Porträts
 const items = [
-  { href: '#preise', label: 'Preise', photo: image('photos/emblem-quadrat') },
-  { href: '#team', label: 'Team', photo: image('photos/mo-wand') },
-  { href: '#kontakt', label: 'Kontakt', photo: image('photos/emblem-breit-900') },
+  { href: '#preise', label: 'Preise', photos: [image('photos/hero-detail')] },
+  { href: '#team', label: 'Team', photos: team.map((m) => m.thumb) },
+  { href: '#kontakt', label: 'Kontakt', photos: [image('photos/emblem-breit-900')] },
 ]
 
 /** Vollbild-Menü: große Links, daneben wechselt das Bild zum Link unter dem Mauszeiger. */
@@ -72,15 +73,18 @@ export function Menu({ open, onClose }: { open: boolean; onClose: () => void }) 
 
               <div className="relative hidden md:block">
                 {items.map((item, i) => (
-                  <img
+                  <div
                     key={item.href}
-                    src={item.photo}
-                    alt=""
                     className={cn(
-                      'absolute inset-0 size-full object-cover transition-all duration-700 ease-out-expo',
+                      'absolute inset-0 grid gap-[2px] transition-all duration-700 ease-out-expo',
+                      item.photos.length > 1 && 'grid-cols-3',
                       active === i ? 'scale-100 opacity-100' : 'scale-105 opacity-0',
                     )}
-                  />
+                  >
+                    {item.photos.map((src) => (
+                      <img key={src} src={src} alt="" className="size-full min-h-0 object-cover" />
+                    ))}
+                  </div>
                 ))}
               </div>
             </div>
