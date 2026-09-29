@@ -31,9 +31,14 @@ npm run preview  # Build lokal ansehen
 | Favicon, App-Icon, Vorschaubild zum Teilen | `public/` |
 | Impressum & Datenschutz | `impressum.html`, `datenschutz.html` |
 
-**Fotos:** Alle Bilder stammen aus den Team-Fotos der Setmore-Seite (Logo-Wand im Salon). Für den
+**Fotos:** Hero, „Über uns“ und Menü nutzen die Fotos von der Logo-Wand im Salon (Setmore-Seite). Für den
 Hero lohnt sich ein eigenes, hochauflösendes Foto (mind. 2400 px breit), z. B. ein Barber bei der Arbeit.
 Einfach `salon-wand.webp` bzw. `salon-wand-800.webp` ersetzen.
+
+**Team-Porträts:** Einheitliche Studio-Porträts (per Bild-KI aus den Originalfotos erstellt), je zweimal
+abgelegt: `name.webp` (1000 px breit, Team-Liste) und `name-thumb.webp` (320 × 320, Fotoraster und
+Preis-Thumbnails). Für Amin fehlt noch ein Foto – bis dahin zeigt die Seite bei ihm das Wandlogo. Neues
+Porträt als `amin.webp` / `amin-thumb.webp` ablegen und in `src/data/salon.ts` eintragen.
 
 **Direktbuchung:** Jede Leistung trägt ihre Setmore-ID (`id`). Wird bei Setmore eine Leistung
 neu angelegt, bekommt sie eine neue ID. Sie steht im Buchungslink der Leistung auf der

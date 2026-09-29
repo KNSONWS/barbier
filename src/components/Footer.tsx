@@ -11,7 +11,7 @@ const YEAR = new Date().getFullYear()
 
 // 3 × 2 Fotoraster zwischen den Wörtern: fünf Porträts und das Logo an der Wand
 const tiles = [
-  ...team.filter((m) => m.key !== 'amin').map((m) => ({ src: m.photo, alt: m.name })),
+  ...team.filter((m) => m.key !== 'amin').map((m) => ({ src: m.thumb, alt: m.name })),
   { src: image('photos/emblem-quadrat'), alt: 'Logo an der Salonwand' },
 ]
 

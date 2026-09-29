@@ -43,7 +43,7 @@ export function TeamList() {
           ))}
         </ul>
 
-        <div className="relative order-1 aspect-square overflow-hidden bg-ink md:order-2 md:aspect-auto md:min-h-[32rem]">
+        <div className="relative order-1 aspect-square overflow-hidden bg-[#cfccc6] md:order-2 md:aspect-auto md:min-h-[32rem]">
           {team.map((m, i) => (
             <img
               key={m.key}
@@ -52,7 +52,7 @@ export function TeamList() {
               loading="lazy"
               decoding="async"
               className={cn(
-                'absolute inset-0 size-full object-cover',
+                'absolute inset-0 size-full object-cover object-[50%_20%]',
                 i === active
                   ? 'z-20 [clip-path:inset(0_0_0_0)] transition-[clip-path] duration-700 ease-out-expo'
                   : i === previous

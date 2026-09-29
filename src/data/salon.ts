@@ -134,7 +134,16 @@ export const services: ServiceCategory[] = [
   },
 ]
 
-export type Member = { key: string; name: string; short: string; role: string; photo: string }
+export type Member = {
+  key: string
+  name: string
+  short: string
+  role: string
+  /** großes Porträt für die Team-Liste */
+  photo: string
+  /** quadratischer Ausschnitt fürs Fotoraster und die kleinen Porträts bei den Preisen */
+  thumb: string
+}
 
 const images = import.meta.glob<string>(['../assets/team/*.webp', '../assets/photos/*.webp'], {
   eager: true,
@@ -144,12 +153,12 @@ const images = import.meta.glob<string>(['../assets/team/*.webp', '../assets/pho
 export const image = (path: string) => images[`../assets/${path}.webp`]
 
 export const team: Member[] = [
-  { key: 'amin', name: 'Amin B. Ahmadi', short: 'Amin', role: 'Inhaber · Barber', photo: image('photos/emblem-breit-900') },
-  { key: 'atena', name: 'Atena', short: 'Atena', role: 'Damen · Farbe · Beauty', photo: image('team/atena') },
-  { key: 'ahmad', name: 'Ahmad', short: 'Ahmad', role: 'Barber', photo: image('team/ahmad') },
-  { key: 'ali', name: 'Ali', short: 'Ali', role: 'Barber', photo: image('team/ali') },
-  { key: 'younes', name: 'Younes', short: 'Younes', role: 'Barber', photo: image('team/younes') },
-  { key: 'mo', name: 'Mo Bargus', short: 'Mo', role: 'Barber', photo: image('team/mo') },
+  { key: 'amin', name: 'Amin B. Ahmadi', short: 'Amin', role: 'Inhaber · Barber', photo: image('photos/emblem-breit-900'), thumb: image('photos/emblem-quadrat') },
+  { key: 'atena', name: 'Atena', short: 'Atena', role: 'Damen · Farbe · Beauty', photo: image('team/atena'), thumb: image('team/atena-thumb') },
+  { key: 'ahmad', name: 'Ahmad', short: 'Ahmad', role: 'Barber', photo: image('team/ahmad'), thumb: image('team/ahmad-thumb') },
+  { key: 'ali', name: 'Ali', short: 'Ali', role: 'Barber', photo: image('team/ali'), thumb: image('team/ali-thumb') },
+  { key: 'younes', name: 'Younes', short: 'Younes', role: 'Barber', photo: image('team/younes'), thumb: image('team/younes-thumb') },
+  { key: 'mo', name: 'Mo Bargus', short: 'Mo', role: 'Barber', photo: image('team/mo'), thumb: image('team/mo-thumb') },
 ]
 
 export const member = (key: string) => team.find((m) => m.key === key)!

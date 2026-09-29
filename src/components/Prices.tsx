@@ -15,7 +15,7 @@ function Faces({ keys, className }: { keys: string[]; className?: string }) {
         return (
           <img
             key={key}
-            src={m.photo}
+            src={m.thumb}
             alt={m.name}
             title={m.name}
             loading="lazy"
