@@ -1,5 +1,5 @@
 import { motion } from 'motion/react'
-import { image, salon, team } from '../data/salon'
+import { salon, team } from '../data/salon'
 import { compactHours } from '../lib/hours'
 import { EASE_OUT_EXPO } from '../lib/motion'
 import { useOpenStatus } from '../lib/useOpenStatus'
@@ -9,11 +9,8 @@ import { ArrowUpRight } from './Icons'
 
 const YEAR = new Date().getFullYear()
 
-// 3 × 2 Fotoraster zwischen den Wörtern: fünf Porträts und das Logo an der Wand
-const tiles = [
-  ...team.filter((m) => m.key !== 'amin').map((m) => ({ src: m.thumb, alt: m.name })),
-  { src: image('photos/emblem-quadrat'), alt: 'Logo an der Salonwand' },
-]
+// 3 × 2 Fotoraster zwischen den Wörtern: das ganze Team
+const tiles = team.map((m) => ({ src: m.thumb, alt: m.name }))
 
 function PhotoGrid() {
   return (

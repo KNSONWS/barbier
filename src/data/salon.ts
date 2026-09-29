@@ -153,7 +153,7 @@ const images = import.meta.glob<string>(['../assets/team/*.webp', '../assets/pho
 export const image = (path: string) => images[`../assets/${path}.webp`]
 
 export const team: Member[] = [
-  { key: 'amin', name: 'Amin B. Ahmadi', short: 'Amin', role: 'Inhaber · Barber', photo: image('photos/emblem-breit-900'), thumb: image('photos/emblem-quadrat') },
+  { key: 'amin', name: 'Amin B. Ahmadi', short: 'Amin', role: 'Inhaber · Barber', photo: image('team/amin'), thumb: image('team/amin-thumb') },
   { key: 'atena', name: 'Atena', short: 'Atena', role: 'Damen · Farbe · Beauty', photo: image('team/atena'), thumb: image('team/atena-thumb') },
   { key: 'ahmad', name: 'Ahmad', short: 'Ahmad', role: 'Barber', photo: image('team/ahmad'), thumb: image('team/ahmad-thumb') },
   { key: 'ali', name: 'Ali', short: 'Ali', role: 'Barber', photo: image('team/ali'), thumb: image('team/ali-thumb') },
