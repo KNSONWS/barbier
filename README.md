@@ -28,6 +28,7 @@ npm run preview  # Build lokal ansehen
 | Fotos (Hero, Menü) | `src/assets/photos/*.webp` |
 | Logo | `src/assets/logo/emblem.svg` |
 | Team-Porträts | `src/assets/team/*.webp` |
+| Galerie „Momente“ (Bilder & Titel) | `src/assets/gallery/*.webp`, `src/components/Gallery.tsx` |
 | Schriftzug oben in der Mitte | `src/components/Nav.tsx` |
 | Favicon, App-Icon, Vorschaubild zum Teilen | `public/` |
 | Impressum & Datenschutz | `impressum.html`, `datenschutz.html` |
@@ -52,6 +53,10 @@ einfach `emblem.svg` ersetzen (ein `<path>` pro Form, `fill="currentColor"`).
 abgelegt: `name.webp` (1000 px breit, Team-Liste) und `name-thumb.webp` (320 × 320, Fotoraster und
 Preis-Thumbnails). Neue Porträts im selben Format ablegen und in `src/data/salon.ts` eintragen.
 
+**Galerie:** Schwarze Section zwischen Team und Preise. Auf dem Desktop bleibt sie stehen und die Bilder
+laufen beim Scrollen seitlich durch, auf dem Handy wird gewischt. Neues Bild: als WebP (900 px breit) in
+`src/assets/gallery/` ablegen und in `moments` in `Gallery.tsx` eintragen (Titel + Seitenverhältnis).
+
 **Direktbuchung:** Jede Leistung trägt ihre Setmore-ID (`id`). Wird bei Setmore eine Leistung
 neu angelegt, bekommt sie eine neue ID. Sie steht im Buchungslink der Leistung auf der
 Setmore-Seite hinter `products=`.
@@ -61,6 +66,7 @@ Setmore-Seite hinter `products=`.
 - [ ] Platzhalter in `impressum.html` und `datenschutz.html` ausfüllen (`[…]`) und rechtlich prüfen lassen
 - [ ] Domain in `.env` bei `VITE_SITE_URL` eintragen (für das Vorschaubild bei WhatsApp/Facebook)
 - [ ] Rollen im Team prüfen (`src/data/salon.ts`)
+- [ ] Einverständnis der Kunden auf den Galerie-Fotos einholen
 - [ ] Einverständnis des Teams für die Verwendung der Fotos einholen (Porträts und Hero sind KI-Bilder
       nach echten Fotos – vor der Veröffentlichung freigeben lassen)
 

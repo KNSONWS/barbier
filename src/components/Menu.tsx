@@ -5,11 +5,13 @@ import { cn } from '../lib/cn'
 import { EASE_OUT_EXPO } from '../lib/motion'
 import { scrollToHash, unlockScroll } from '../lib/scroll'
 import { GridLines } from './GridLines'
+import galleryCover from '../assets/gallery/twists.webp'
 
 // Ein Bild oder – beim Team – ein 3 × 2 Raster aus allen Porträts
 const items = [
   { href: '#preise', label: 'Preise', photos: [image('photos/hero-detail')] },
   { href: '#team', label: 'Team', photos: team.map((m) => m.thumb) },
+  { href: '#galerie', label: 'Galerie', photos: [galleryCover] },
   { href: '#kontakt', label: 'Kontakt', photos: [image('photos/emblem-breit-900')] },
 ]
 

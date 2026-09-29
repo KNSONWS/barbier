@@ -2,6 +2,7 @@ import Lenis from 'lenis'
 import { MotionConfig } from 'motion/react'
 import { useEffect } from 'react'
 import { Footer } from './components/Footer'
+import { Gallery } from './components/Gallery'
 import { GridLines } from './components/GridLines'
 import { Hero } from './components/Hero'
 import { Intro } from './components/Intro'
@@ -36,6 +37,7 @@ export default function App() {
         <Hero />
         <Intro />
         <TeamList />
+        <Gallery />
         <Prices />
       </main>
       <Footer />
