@@ -1,8 +1,8 @@
 """Filmkorn auf die Website-Fotos rechnen.
 
 Liest die unbearbeiteten Bilder aus design/original/ und schreibt die gekörnten Versionen
-nach src/assets/. Hero und Team-Porträts: Variante A (fein), alle anderen Fotos (Galerie,
-Salon-Foto im Menü): Variante B (Film, ISO 800).
+nach src/assets/. Galerie: Variante B (Film, ISO 800), alle anderen Fotos (Hero, Team,
+Menü): Variante A (fein).
 
     pip install numpy pillow
     python3 scripts/grain.py
@@ -23,11 +23,8 @@ VARIANTS = {
     'B': dict(amount=0.028, size=1.5, color=0.15, lift=0.03, contrast=1.05, sat=0.92),
 }
 
-FINE = {'photos/hero.webp', 'photos/hero-1000.webp', 'photos/hero-mobile.webp', 'photos/hero-detail.webp'}
-
-
 def variant_for(rel):
-    return 'A' if rel in FINE or rel.startswith('team/') else 'B'
+    return 'B' if rel.startswith('gallery/') else 'A'
 
 
 LUMA = np.array([0.2126, 0.7152, 0.0722], np.float32)
