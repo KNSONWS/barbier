@@ -11,6 +11,8 @@ Setmore-Buchung) · Footer mit Fotoraster, Adresse, Öffnungszeiten und Live-Sta
 **Technik:** Vite, React, TypeScript, Tailwind CSS, Motion, Lenis. Schriften (Archivo, Instrument Serif)
 liegen lokal, es gibt keine Cookies und keine externen Einbindungen.
 
+Wie die Seite entstanden ist (Verlauf, Bild-Prompts, Logo, Körnung): siehe [PROJEKT.md](PROJEKT.md).
+
 ## Starten
 
 ```bash
