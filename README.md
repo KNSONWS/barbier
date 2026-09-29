@@ -25,7 +25,8 @@ npm run preview  # Build lokal ansehen
 | Was | Wo |
 | --- | --- |
 | Preise, Dauer, Leistungen, Öffnungszeiten, Team, Kontakt | `src/data/salon.ts` |
-| Fotos (Hero, Über uns, Menü) | `src/assets/photos/*.webp` |
+| Fotos (Hero, Menü) | `src/assets/photos/*.webp` |
+| Logo | `src/assets/logo/emblem.svg` |
 | Team-Porträts | `src/assets/team/*.webp` |
 | Schriftzug oben in der Mitte | `src/components/Nav.tsx` |
 | Favicon, App-Icon, Vorschaubild zum Teilen | `public/` |
@@ -36,8 +37,16 @@ und `hero-mobile.webp` (Hochformat-Ausschnitt fürs Handy). Die Headline steht u
 Schere und Kamm frei bleiben. Beim Austauschen alle drei Dateien ersetzen, den Handy-Ausschnitt so wählen,
 dass Gesicht und Hände darin liegen. `hero-detail.webp` (Hände mit Schere und Kamm) erscheint im Menü.
 
-**Salon-Fotos:** „Über uns“ und der Menüpunkt „Kontakt“ zeigen das Logo an der Wand im Salon
-(`emblem.webp`, `emblem-breit-900.webp`, aus den Fotos der Setmore-Seite).
+**Logo:** Das Instagram-Profilbild (`src/assets/logo/instagram-profilbild.jpg`) wurde mit potrace
+vektorisiert:
+- `src/assets/logo/emblem.svg` – nur das Emblem, Farbe über `currentColor` (standardmäßig schwarz), für Druck & Co.
+- `public/logo-profilbild.svg` – wie das Profilbild: quadratisch, weißes Emblem auf dunklem Grund.
+
+Auf der Website steht es in „Über uns“: Die Linien zeichnen sich beim Scrollen, danach folgt ein Lichtreflex
+dem Mauszeiger (`src/components/Emblem.tsx`). Liegt irgendwann die Original-Vektordatei vom Designer vor,
+einfach `emblem.svg` ersetzen (ein `<path>` pro Form, `fill="currentColor"`).
+
+**Salon-Foto:** Der Menüpunkt „Kontakt“ zeigt das Logo an der Wand im Salon (`emblem-breit-900.webp`).
 
 **Team-Porträts:** Einheitliche Studio-Porträts (per Bild-KI aus den Originalfotos erstellt), je zweimal
 abgelegt: `name.webp` (1000 px breit, Team-Liste) und `name-thumb.webp` (320 × 320, Fotoraster und

@@ -72,6 +72,45 @@
   box-shadow: inset -1px 0 0 var(--grid-line, rgb(10 9 12 / 0.07));
 }
 
+/* Logo-Emblem: Linien zeichnen sich, danach füllen sie sich (siehe Emblem.tsx) */
+.emblem .emblem-lines path {
+  fill: none;
+  stroke: var(--color-paper);
+  stroke-width: 2;
+  stroke-dasharray: 1 1;
+  stroke-dashoffset: 1;
+}
+
+.emblem .emblem-fill {
+  opacity: 0;
+}
+
+.emblem[data-drawn] .emblem-lines path {
+  stroke-dashoffset: 0;
+  transition: stroke-dashoffset 2.6s var(--ease-out-expo) calc(var(--i) * 30ms);
+}
+
+.emblem[data-drawn] .emblem-lines {
+  opacity: 0;
+  transition: opacity 1s ease 2.6s;
+}
+
+.emblem[data-drawn] .emblem-fill {
+  opacity: 1;
+  transition: opacity 1.4s ease 1.4s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .emblem .emblem-lines {
+    display: none;
+  }
+
+  .emblem .emblem-fill {
+    opacity: 1;
+    transition: none;
+  }
+}
+
 /* Rechtstexte (Impressum / Datenschutz) */
 @layer components {
   .legal h2 {

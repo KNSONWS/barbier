@@ -1,6 +1,5 @@
 import { motion, type Variants } from 'motion/react'
 import type { ReactNode } from 'react'
-import { cn } from '../lib/cn'
 import { EASE_OUT_EXPO } from '../lib/motion'
 
 const tags = { h1: motion.h1, h2: motion.h2, h3: motion.h3, p: motion.p, div: motion.div }
@@ -59,39 +58,6 @@ export function FadeIn({ children, className, delay = 0 }: { children: ReactNode
       transition={{ duration: 1, delay, ease: EASE_OUT_EXPO }}
     >
       {children}
-    </motion.div>
-  )
-}
-
-/** Bild, das sich von unten aufdeckt und dabei leicht herauszoomt. */
-export function ImageReveal({
-  src,
-  alt,
-  className,
-  imgClassName,
-}: {
-  src: string
-  alt: string
-  className?: string
-  imgClassName?: string
-}) {
-  const transition = { duration: 1.3, ease: EASE_OUT_EXPO }
-  // Beobachtet wird der ungeclippte Rahmen: ein komplett weggeclipptes Element gilt nie als sichtbar
-  return (
-    <motion.div className={className} initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.25 }}>
-      <motion.div
-        className="size-full overflow-hidden"
-        variants={{ hidden: { clipPath: 'inset(100% 0% 0% 0%)' }, show: { clipPath: 'inset(0% 0% 0% 0%)', transition } }}
-      >
-        <motion.img
-          src={src}
-          alt={alt}
-          loading="lazy"
-          decoding="async"
-          className={cn('size-full object-cover', imgClassName)}
-          variants={{ hidden: { scale: 1.2 }, show: { scale: 1, transition: { ...transition, duration: 1.7 } } }}
-        />
-      </motion.div>
     </motion.div>
   )
 }

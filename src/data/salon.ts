@@ -149,7 +149,7 @@ const images = import.meta.glob<string>(['../assets/team/*.webp', '../assets/pho
   eager: true,
   import: 'default',
 })
-/** Bild-URL aus `src/assets`, z. B. `image('photos/emblem')` */
+/** Bild-URL aus `src/assets`, z. B. `image('photos/hero')` */
 export const image = (path: string) => images[`../assets/${path}.webp`]
 
 export const team: Member[] = [
