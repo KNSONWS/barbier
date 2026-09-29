@@ -57,6 +57,11 @@ Preis-Thumbnails). Neue Porträts im selben Format ablegen und in `src/data/salo
 laufen beim Scrollen seitlich durch, auf dem Handy wird gewischt. Neues Bild: als WebP (900 px breit) in
 `src/assets/gallery/` ablegen und in `moments` in `Gallery.tsx` eintragen (Titel + Seitenverhältnis).
 
+**Körnung:** Alle Fotos haben einen Filmkorn-Look – Hero fein (Variante A), alle übrigen Fotos wie Film
+ISO 800 (Variante B). Die unbearbeiteten Originale liegen in `design/original/`. Neue oder geänderte Fotos
+dort ablegen (gleicher Pfad wie in `src/assets/`) und `python3 scripts/grain.py` ausführen – das Skript
+schreibt die gekörnten Versionen nach `src/assets/`.
+
 **Direktbuchung:** Jede Leistung trägt ihre Setmore-ID (`id`). Wird bei Setmore eine Leistung
 neu angelegt, bekommt sie eine neue ID. Sie steht im Buchungslink der Leistung auf der
 Setmore-Seite hinter `products=`.
