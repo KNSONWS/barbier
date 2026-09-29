@@ -1,84 +1,52 @@
 import { motion, useScroll, useTransform } from 'motion/react'
 import { useRef } from 'react'
-import { salon } from '../data/salon'
+import { image, salon } from '../data/salon'
 import { EASE_OUT_EXPO } from '../lib/motion'
-import { useFitText } from '../lib/useFitText'
-import { useOpenStatus } from '../lib/useOpenStatus'
-import { BookButton } from './BookButton'
-import { ArrowDown } from './Icons'
-import { RevealChars } from './Reveal'
-import { RotatingBadge } from './RotatingBadge'
-import { SilkBackground } from './SilkBackground'
-import { StatusPill } from './StatusPill'
-
-const fadeUp = (delay: number) => ({
-  initial: { opacity: 0, y: 24, filter: 'blur(10px)' },
-  animate: { opacity: 1, y: 0, filter: 'blur(0px)' },
-  transition: { duration: 1.2, delay, ease: EASE_OUT_EXPO },
-})
+import { Button } from './Button'
+import { RevealLines } from './Reveal'
 
 export function Hero() {
   const ref = useRef<HTMLElement>(null)
-  const status = useOpenStatus()
-  const wordmark = useFitText<HTMLSpanElement>()
-
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end start'] })
-  const contentY = useTransform(scrollYProgress, [0, 1], ['0%', '18%'])
-  const contentOpacity = useTransform(scrollYProgress, [0, 0.75], [1, 0])
-  const bgScale = useTransform(scrollYProgress, [0, 1], [1, 1.15])
+  const y = useTransform(scrollYProgress, [0, 1], ['0%', '20%'])
 
   return (
-    <section id="top" ref={ref} className="relative isolate flex h-svh min-h-[640px] flex-col overflow-hidden">
-      <motion.div style={{ scale: bgScale }} className="absolute inset-0 -z-20 bg-[radial-gradient(120%_80%_at_70%_20%,#2a2724_0%,#0a0a0a_70%)]">
-        <SilkBackground />
+    <section id="top" ref={ref} className="relative isolate h-svh min-h-[560px] overflow-hidden bg-ink text-paper">
+      <motion.div style={{ y }} className="absolute inset-0 -z-20">
+        <motion.img
+          src={image('photos/salon-wand')}
+          srcSet={`${image('photos/salon-wand-800')} 800w, ${image('photos/salon-wand')} 1317w`}
+          sizes="100vw"
+          alt={`Barber vor dem Logo an der Wand im Salon ${salon.name}`}
+          fetchPriority="high"
+          initial={{ scale: 1.15 }}
+          animate={{ scale: 1 }}
+          transition={{ duration: 2.2, ease: EASE_OUT_EXPO }}
+          className="size-full object-cover object-[50%_60%] md:object-[50%_100%]"
+        />
       </motion.div>
-      <div
-        aria-hidden="true"
-        className="absolute inset-0 -z-10 bg-[radial-gradient(90%_70%_at_50%_40%,transparent_0%,rgba(10,10,10,0.55)_100%),linear-gradient(to_bottom,rgba(10,10,10,0.5)_0%,transparent_30%,transparent_55%,#0a0a0a_100%)]"
-      />
+      <div aria-hidden="true" className="absolute inset-0 -z-10 bg-ink/35" />
+      <div aria-hidden="true" className="absolute inset-x-0 top-0 -z-10 h-40 bg-linear-to-b from-ink/60 to-transparent" />
+      <div aria-hidden="true" className="absolute inset-x-0 bottom-0 -z-10 h-2/3 bg-linear-to-t from-ink/70 to-transparent" />
 
-      <motion.div
-        style={{ y: contentY, opacity: contentOpacity }}
-        className="mx-auto flex w-full max-w-[1600px] flex-1 flex-col justify-end px-5 pb-6 md:px-10 md:pb-10"
-      >
-        <div className="flex items-end justify-between gap-8">
-          <div className="max-w-2xl">
-            <motion.div {...fadeUp(0.5)}>
-              <StatusPill status={status} />
-            </motion.div>
-            <motion.p {...fadeUp(0.6)} className="mt-6 font-serif text-[2.6rem] leading-[0.95] tracking-tight sm:text-6xl lg:text-7xl">
-              Barber & Friseur
-              <br />
-              <em className="text-bone/55">in {salon.city}.</em>
-            </motion.p>
-            <motion.div {...fadeUp(0.75)} className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-4">
-              <BookButton size="lg" />
-              <a
-                href="#leistungen"
-                className="group inline-flex items-center gap-2 text-sm text-bone/70 transition-colors hover:text-bone"
-              >
-                Preise ansehen
-                <ArrowDown className="size-4 transition-transform duration-500 ease-out-expo group-hover:translate-y-1" />
-              </a>
-            </motion.div>
-          </div>
-          <motion.div {...fadeUp(0.9)} className="hidden md:block">
-            <RotatingBadge />
-          </motion.div>
-        </div>
-
-        <h1 className="mt-10 md:mt-12">
-          <span className="sr-only">
-            {salon.name} – Barber & Friseur in {salon.city}
-          </span>
-          <span ref={wordmark} className="block w-max font-serif leading-[0.82] tracking-[-0.035em]">
-            <RevealChars
-              charClassName="chrome-text"
-              words={[{ text: 'Amin' }, { text: 'B.', className: 'italic', mobileBreak: true }, { text: 'Ahmadi' }]}
-            />
-          </span>
-        </h1>
-      </motion.div>
+      <div className="flex h-full flex-col items-center justify-end px-4 pb-10 text-center md:pb-14">
+        <RevealLines
+          as="h1"
+          onLoad
+          delay={0.3}
+          srLabel={`${salon.name} – Barber & Friseur in ${salon.city}. Dein Look, unser Handwerk.`}
+          className="display text-[clamp(1.55rem,6.4vw,5.75rem)]"
+          lines={['Dein Look.', 'Unser Handwerk.']}
+        />
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1, delay: 0.9, ease: EASE_OUT_EXPO }}
+          className="mt-6 md:mt-8"
+        >
+          <Button tone="light" />
+        </motion.div>
+      </div>
     </section>
   )
 }

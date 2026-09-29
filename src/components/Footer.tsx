@@ -1,41 +1,122 @@
-import { salon } from '../data/salon'
-import { Facebook } from './Icons'
-import { Logo } from './Logo'
+import { motion } from 'motion/react'
+import { image, salon, team } from '../data/salon'
+import { compactHours } from '../lib/hours'
+import { EASE_OUT_EXPO } from '../lib/motion'
+import { useOpenStatus } from '../lib/useOpenStatus'
+import { Button } from './Button'
+import { GridLines } from './GridLines'
+import { ArrowUpRight } from './Icons'
 
 const YEAR = new Date().getFullYear()
 
-export function Footer() {
-  return (
-    <footer className="border-t border-white/10">
-      <div className="mx-auto flex max-w-[1600px] flex-col gap-10 px-5 pt-12 pb-28 md:flex-row md:items-end md:justify-between md:px-10 md:pb-12">
-        <div className="flex items-center gap-4">
-          <Logo className="size-12 text-bone" />
-          <div className="text-sm">
-            <p className="font-medium">{salon.legalName}</p>
-            <p className="text-ash">
-              {salon.street}, {salon.zip} {salon.city}
-            </p>
-          </div>
-        </div>
+// 3 × 2 Fotoraster zwischen den Wörtern: fünf Porträts und das Logo an der Wand
+const tiles = [
+  ...team.filter((m) => m.key !== 'amin').map((m) => ({ src: m.photo, alt: m.name })),
+  { src: image('photos/emblem-quadrat'), alt: 'Logo an der Salonwand' },
+]
 
-        <div className="flex flex-wrap items-center gap-x-6 gap-y-3 text-sm text-ash">
-          <a href="impressum.html" className="transition-colors hover:text-bone">
-            Impressum
-          </a>
-          <a href="datenschutz.html" className="transition-colors hover:text-bone">
-            Datenschutz
-          </a>
+function PhotoGrid() {
+  return (
+    <span aria-hidden="true" className="my-3 grid w-[min(62vw,19rem)] grid-cols-3 gap-[2px] border-2 border-paper bg-paper md:my-5">
+      {tiles.map((t, i) => (
+        <motion.span
+          key={t.alt}
+          initial={{ opacity: 0, scale: 0.8 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          viewport={{ once: true, amount: 0.6 }}
+          transition={{ duration: 0.7, delay: i * 0.06, ease: EASE_OUT_EXPO }}
+          className="block aspect-square overflow-hidden bg-ink"
+        >
+          <img
+            src={t.src}
+            alt=""
+            loading="lazy"
+            className="size-full object-cover grayscale transition duration-500 hover:scale-110 hover:grayscale-0"
+          />
+        </motion.span>
+      ))}
+    </span>
+  )
+}
+
+export function Footer() {
+  const status = useOpenStatus()
+
+  return (
+    <footer id="kontakt" className="relative isolate bg-ink px-4 pt-24 pb-6 text-paper md:px-8 md:pt-36">
+      <GridLines tone="dark" />
+
+      <p className="mini text-center text-paper/60">Termin</p>
+      <h2 className="display mt-4 flex flex-col items-center text-center text-[clamp(2.1rem,5vw,4.5rem)]">
+        <span>Bis zum</span>
+        <PhotoGrid />
+        <span>nächsten Schnitt.</span>
+      </h2>
+      <div className="mt-8 flex justify-center md:mt-10">
+        <Button tone="light" />
+      </div>
+
+      <div className="mt-24 grid gap-10 text-[15px] leading-relaxed md:mt-36 md:grid-cols-3 md:gap-8">
+        <div>
+          <p className="mini text-paper/50">Adresse</p>
+          <address className="mt-2 not-italic">
+            {salon.street}
+            <br />
+            {salon.zip} {salon.city}
+          </address>
           <a
-            href={salon.facebook}
+            href={salon.mapsUrl}
             target="_blank"
             rel="noopener"
-            aria-label="Facebook"
-            className="grid size-9 place-items-center rounded-full border border-white/15 transition-colors hover:border-white/40 hover:text-bone"
+            className="mt-2 inline-flex items-center gap-1 underline underline-offset-4 hover:opacity-60"
           >
-            <Facebook className="size-4" />
+            Route planen <ArrowUpRight className="size-3.5" />
           </a>
-          <span className="font-mono text-xs">© {YEAR}</span>
         </div>
+
+        <div>
+          <p className="mini text-paper/50">Öffnungszeiten</p>
+          <p className="mt-2">
+            {compactHours().map((line) => (
+              <span key={line} className="block">
+                {line}
+              </span>
+            ))}
+          </p>
+          <p className="mt-2 flex items-center gap-2 text-paper/70">
+            <span className={`size-2 rounded-full ${status.open ? 'bg-emerald-400' : 'bg-paper/40'}`} />
+            {status.label}
+          </p>
+        </div>
+
+        <div>
+          <p className="mini text-paper/50">Kontakt</p>
+          <p className="mt-2">
+            <a href={`tel:${salon.phone}`} className="block hover:opacity-60">
+              {salon.phoneDisplay}
+            </a>
+            <a href={`mailto:${salon.email}`} className="block hover:opacity-60">
+              {salon.email}
+            </a>
+          </p>
+        </div>
+      </div>
+
+      <div className="mt-20 flex flex-wrap items-center justify-between gap-4 border-t border-paper/15 pt-6 text-xs text-paper/60 md:mt-28">
+        <span>
+          © {YEAR} {salon.legalName}
+        </span>
+        <span className="flex gap-6">
+          <a href="impressum.html" className="hover:text-paper">
+            Impressum
+          </a>
+          <a href="datenschutz.html" className="hover:text-paper">
+            Datenschutz
+          </a>
+          <a href={salon.facebook} target="_blank" rel="noopener" className="hover:text-paper">
+            Facebook
+          </a>
+        </span>
       </div>
     </footer>
   )

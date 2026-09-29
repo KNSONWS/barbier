@@ -54,12 +54,19 @@ export const serviceUrl = (s: Service) =>
     ? `${SETMORE}/book?step=additional-products&products=${s.id}&type=service&staff=${s.staff}&staffSelected=false`
     : `${SETMORE}/book?step=staff&products=${s.id}&type=service`
 
-export type ServiceCategory = { key: string; label: string; items: Service[] }
+export type ServiceCategory = {
+  key: string
+  label: string
+  /** wer diese Leistungen anbietet (Schlüssel aus `team`) */
+  team: string[]
+  items: Service[]
+}
 
 export const services: ServiceCategory[] = [
   {
     key: 'herren',
     label: 'Herren',
+    team: ['amin', 'ahmad', 'ali', 'younes', 'mo'],
     items: [
       { name: 'Maschinenschnitt', note: 'ohne Waschen', minutes: 20, price: 17, id: 'scab580064626bcfc2786e3e10e359241dc0c9d54' },
       { name: 'Herren Basic', note: 'Waschen, Schneiden, Föhnen', minutes: 30, price: 23, id: 'sc3f7ae51cdeb863047f5376611c179c78f33e84c' },
@@ -71,6 +78,7 @@ export const services: ServiceCategory[] = [
   {
     key: 'damen',
     label: 'Damen',
+    team: ['atena', 'amin', 'ahmad', 'ali', 'younes'],
     items: [
       { name: 'Damen Basic · kurz', note: 'Waschen, Schneiden, Föhnen', minutes: 30, price: 26, from: true, id: 'sbadfe20c7a6179c705a30d3cf379fbc77b113b0c' },
       { name: 'Damen Basic · lang', note: 'Waschen, Schneiden, Föhnen', minutes: 45, price: 30, from: true, id: 's6414812bfc137bb6cf41df66e12b6f5cf465b3f7', staff: ATENA },
@@ -86,6 +94,7 @@ export const services: ServiceCategory[] = [
   {
     key: 'farbe',
     label: 'Farbe & Form',
+    team: ['atena'],
     items: [
       { name: 'Farbe / Tönung · Ansatz', note: 'ab 3 cm Ansatz', minutes: 50, price: 40, from: true, id: 's44a840b1c42fdb53b6af3f1ffd24dfea6ee29a0d', staff: ATENA },
       { name: 'Farbe / Tönung komplett · kurz', minutes: 50, price: 38, from: true, id: 'se060cd30916ae62e34540083e6c1f6fef8f45a4e', staff: ATENA },
@@ -104,6 +113,7 @@ export const services: ServiceCategory[] = [
   {
     key: 'kinder',
     label: 'Kinder',
+    team: ['amin', 'ahmad', 'ali', 'younes', 'mo', 'atena'],
     items: [
       { name: 'Jungen', note: 'bis 12 Jahre', minutes: 20, price: 17, id: 's61b05497d001b8d46e3b8ecd88481f0836ff902d' },
       { name: 'Mädchen', note: 'bis 12 Jahre', minutes: 30, price: 17, id: 's73cda469cc3dbd3a134ef93916d12c6a0366084a', staff: ATENA },
@@ -112,6 +122,7 @@ export const services: ServiceCategory[] = [
   {
     key: 'beauty',
     label: 'Beauty',
+    team: ['atena'],
     items: [
       { name: 'Augenbrauen zupfen', note: 'mit Faden', minutes: 10, price: 8, id: 's68c001a88641dfd20758033ec42ab080eb7581a5', staff: ATENA },
       { name: 'Augenbrauen färben', minutes: 10, price: 8, id: 's861a13b3cee5389e7b1b7bcee268234b2a0c0d96', staff: ATENA },
@@ -123,16 +134,22 @@ export const services: ServiceCategory[] = [
   },
 ]
 
-export type Member = { name: string; role: string; photo?: string }
+export type Member = { key: string; name: string; short: string; role: string; photo: string }
 
-const photos = import.meta.glob<string>('../assets/team/*.webp', { eager: true, import: 'default' })
-const photo = (file: string) => photos[`../assets/team/${file}.webp`]
+const images = import.meta.glob<string>(['../assets/team/*.webp', '../assets/photos/*.webp'], {
+  eager: true,
+  import: 'default',
+})
+/** Bild-URL aus `src/assets`, z. B. `image('photos/emblem')` */
+export const image = (path: string) => images[`../assets/${path}.webp`]
 
 export const team: Member[] = [
-  { name: 'Amin B. Ahmadi', role: 'Inhaber · Barber' },
-  { name: 'Atena', role: 'Damen · Farbe · Beauty', photo: photo('atena') },
-  { name: 'Ahmad', role: 'Barber', photo: photo('ahmad') },
-  { name: 'Ali', role: 'Barber', photo: photo('ali') },
-  { name: 'Younes', role: 'Barber', photo: photo('younes') },
-  { name: 'Mo Bargus', role: 'Barber', photo: photo('mo') },
+  { key: 'amin', name: 'Amin B. Ahmadi', short: 'Amin', role: 'Inhaber · Barber', photo: image('photos/emblem-breit-900') },
+  { key: 'atena', name: 'Atena', short: 'Atena', role: 'Damen · Farbe · Beauty', photo: image('team/atena') },
+  { key: 'ahmad', name: 'Ahmad', short: 'Ahmad', role: 'Barber', photo: image('team/ahmad') },
+  { key: 'ali', name: 'Ali', short: 'Ali', role: 'Barber', photo: image('team/ali') },
+  { key: 'younes', name: 'Younes', short: 'Younes', role: 'Barber', photo: image('team/younes') },
+  { key: 'mo', name: 'Mo Bargus', short: 'Mo', role: 'Barber', photo: image('team/mo') },
 ]
+
+export const member = (key: string) => team.find((m) => m.key === key)!

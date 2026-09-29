@@ -1,16 +1,15 @@
 # Amin B. Ahmadi — Barber & Friseur, Kaiserslautern
 
-One-Pager für den Salon: dunkel, modern, wenig Text. Jede Buchung läuft über die bestehende
-Setmore-Seite ([aminbahmadi.setmore.com](https://aminbahmadi.setmore.com)).
+Minimalistischer One-Pager für den Salon, gestalterisch angelehnt an [crispmtl.com](https://www.crispmtl.com):
+helles Layout mit feinen Rasterlinien, breite Versal-Headlines, kleine Serifen-Labels, eckige Buttons.
+Jede Buchung läuft über die bestehende Setmore-Seite ([aminbahmadi.setmore.com](https://aminbahmadi.setmore.com)).
 
-**Bereiche:** Hero mit animiertem Seidenhintergrund (WebGL) · Laufband · Leistungen & Preise
-(jede Zeile öffnet direkt die passende Setmore-Buchung) · Team · Adresse & Öffnungszeiten mit
-Live-Status „Jetzt geöffnet“ · großer Buchungs-CTA · Impressum & Datenschutz.
+**Bereiche:** Menü-Overlay (Bild wechselt je Link) · Hero mit Foto aus dem Salon · Über uns mit Bild-Reveal ·
+Team als Namensliste mit Porträtwechsel · Preise als Akkordeon (jede Zeile öffnet direkt die passende
+Setmore-Buchung) · Footer mit Fotoraster, Adresse, Öffnungszeiten und Live-Status „Jetzt geöffnet“.
 
-**Technik:** Vite, React, TypeScript, Tailwind CSS, Motion, Lenis. Effekte nach Vorlagen von
-[React Bits](https://reactbits.dev) (Silk, Scroll Velocity, Circular Text, Chroma Grid, Magnet,
-Split Text). Schriften (Instrument Serif, Geist) liegen lokal, es gibt keine Cookies und keine
-externen Einbindungen.
+**Technik:** Vite, React, TypeScript, Tailwind CSS, Motion, Lenis. Schriften (Archivo, Instrument Serif)
+liegen lokal, es gibt keine Cookies und keine externen Einbindungen.
 
 ## Starten
 
@@ -26,14 +25,15 @@ npm run preview  # Build lokal ansehen
 | Was | Wo |
 | --- | --- |
 | Preise, Dauer, Leistungen, Öffnungszeiten, Team, Kontakt | `src/data/salon.ts` |
-| Logo | `src/assets/logo.svg` |
-| Team-Fotos | `src/assets/team/*.webp` |
+| Fotos (Hero, Über uns, Menü, Fotoraster) | `src/assets/photos/*.webp` |
+| Team-Porträts | `src/assets/team/*.webp` |
+| Schriftzug oben in der Mitte | `src/components/Nav.tsx` |
 | Favicon, App-Icon, Vorschaubild zum Teilen | `public/` |
 | Impressum & Datenschutz | `impressum.html`, `datenschutz.html` |
 
-**Logo:** Das aktuelle Logo ist ein Platzhalter-Monogramm. Das echte Logo als SVG unter
-`src/assets/logo.svg` ablegen. Die Farbe im SVG ist egal (die Seite färbt es selbst ein), der
-Hintergrund muss aber transparent sein.
+**Fotos:** Alle Bilder stammen aus den Team-Fotos der Setmore-Seite (Logo-Wand im Salon). Für den
+Hero lohnt sich ein eigenes, hochauflösendes Foto (mind. 2400 px breit), z. B. ein Barber bei der Arbeit.
+Einfach `salon-wand.webp` bzw. `salon-wand-800.webp` ersetzen.
 
 **Direktbuchung:** Jede Leistung trägt ihre Setmore-ID (`id`). Wird bei Setmore eine Leistung
 neu angelegt, bekommt sie eine neue ID. Sie steht im Buchungslink der Leistung auf der
@@ -41,10 +41,10 @@ Setmore-Seite hinter `products=`.
 
 ## Vor dem Livegang
 
-- [ ] Echtes Logo einsetzen (siehe oben)
 - [ ] Platzhalter in `impressum.html` und `datenschutz.html` ausfüllen (`[…]`) und rechtlich prüfen lassen
 - [ ] Domain in `.env` bei `VITE_SITE_URL` eintragen (für das Vorschaubild bei WhatsApp/Facebook)
 - [ ] Rollen im Team prüfen (`src/data/salon.ts`)
+- [ ] Einverständnis des Teams für die Verwendung der Fotos einholen
 
 Der Live-Status „Jetzt geöffnet“ rechnet mit den Öffnungszeiten aus `src/data/salon.ts` und
 kennt keine Feiertage.

@@ -1,32 +1,24 @@
 @import 'tailwindcss';
 
 @theme {
-  --color-ink: #0a0a0a;
-  --color-smoke: #181716;
-  --color-bone: #f2ede7;
-  --color-ash: #8f8a84;
-  --color-champagne: #e5cfbb;
+  --color-paper: #f5f4f1;
+  --color-ink: #0a090c;
+  --color-stone: #8a8883;
+  --color-graphite: #3f3f3f;
 
-  --font-sans: 'Geist Variable', ui-sans-serif, system-ui, sans-serif;
+  --font-sans: 'Archivo Variable', ui-sans-serif, system-ui, sans-serif;
   --font-serif: 'Instrument Serif', ui-serif, Georgia, serif;
-  --font-mono: 'Geist Mono Variable', ui-monospace, SFMono-Regular, Menlo, monospace;
 
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
-
-  --animate-spin-slow: spin-slow 22s linear infinite;
-  @keyframes spin-slow {
-    to {
-      transform: rotate(360deg);
-    }
-  }
 }
 
 @layer base {
   html {
-    color-scheme: dark;
-    background-color: var(--color-ink);
-    color: var(--color-bone);
+    background-color: var(--color-paper);
+    color: var(--color-ink);
     font-family: var(--font-sans);
+    font-stretch: 100%;
+    font-weight: 500;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     -webkit-tap-highlight-color: transparent;
@@ -39,17 +31,13 @@
   }
 
   ::selection {
-    background: var(--color-champagne);
-    color: var(--color-ink);
+    background: var(--color-ink);
+    color: var(--color-paper);
   }
 
   :focus-visible {
-    outline: 2px solid var(--color-champagne);
+    outline: 2px solid currentColor;
     outline-offset: 3px;
-  }
-
-  [id] {
-    scroll-margin-top: 4rem;
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -59,69 +47,40 @@
   }
 }
 
-/* Chrom-Verlauf wie das Logo an der Salonwand */
-@utility chrome-text {
-  background-image: linear-gradient(
-    180deg,
-    #ffffff 0%,
-    #efeae4 28%,
-    #a8a29b 48%,
-    #6f6a64 56%,
-    #c9c3bc 72%,
-    #fbf8f4 100%
-  );
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+/* Headlines: breit, fett, Versalien */
+@utility display {
+  font-family: var(--font-sans);
+  font-stretch: 125%;
+  font-weight: 800;
+  text-transform: uppercase;
+  line-height: 0.95;
+  letter-spacing: -0.01em;
 }
 
-/* Großer CTA: Kontur, die sich beim Hover von links füllt */
-.cta-text {
-  color: transparent;
-  -webkit-text-stroke: 1.5px color-mix(in oklab, var(--color-bone) 70%, transparent);
-  background-image: linear-gradient(
-    90deg,
-    var(--color-bone) 50%,
-    color-mix(in oklab, var(--color-bone) 6%, transparent) 50%
-  );
-  background-size: 200% 100%;
-  background-position: 100% 0;
-  -webkit-background-clip: text;
-  background-clip: text;
-  transition: background-position 1s var(--ease-out-expo);
+/* Kleine Serifen-Labels */
+@utility mini {
+  font-family: var(--font-serif);
+  font-size: 15px;
+  line-height: 1.3;
+  font-weight: 400;
 }
 
-.group:hover .cta-text,
-.group:focus-visible .cta-text {
-  background-position: 0 0;
-}
-
-@media (hover: none) {
-  .cta-text {
-    background-position: 0 0;
-  }
-}
-
-/* Feines Filmkorn über der ganzen Seite */
-.grain {
-  opacity: 0.05;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+/* Feine vertikale Rasterlinien im Hintergrund */
+@utility grid-lines {
+  background-image: linear-gradient(to right, var(--grid-line, rgb(10 9 12 / 0.07)) 1px, transparent 1px);
+  background-size: calc(100% / var(--grid-cols, 4)) 100%;
+  box-shadow: inset -1px 0 0 var(--grid-line, rgb(10 9 12 / 0.07));
 }
 
 /* Rechtstexte (Impressum / Datenschutz) */
 @layer components {
   .legal h2 {
     margin-top: 2.5rem;
-    font-family: var(--font-serif);
-    font-size: 1.875rem;
-    line-height: 1.1;
-    color: var(--color-bone);
-  }
-
-  .legal h3 {
-    margin-top: 1.5rem;
-    font-weight: 500;
-    color: var(--color-bone);
+    font-stretch: 125%;
+    font-weight: 800;
+    text-transform: uppercase;
+    font-size: 1.25rem;
+    line-height: 1.2;
   }
 
   .legal p,
@@ -130,17 +89,12 @@
     line-height: 1.7;
   }
 
-  .legal ul {
-    list-style: disc;
-    padding-left: 1.25rem;
-  }
-
   .legal a {
     text-decoration: underline;
     text-underline-offset: 3px;
   }
 
   .legal a:hover {
-    color: var(--color-bone);
+    opacity: 0.6;
   }
 }

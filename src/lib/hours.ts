@@ -58,3 +58,18 @@ export function getOpenStatus(date = new Date()): OpenStatus {
   }
   return { open: false, today: day, label: 'Geschlossen' }
 }
+
+/** Öffnungszeiten kompakt, z. B. ["Mo – Sa 9 – 19 Uhr", "So geschlossen"] */
+export function compactHours() {
+  const groups: { from: string; to: string; open: string | null; close: string | null }[] = []
+  for (const h of hours) {
+    const last = groups[groups.length - 1]
+    if (last && last.open === h.open && last.close === h.close) last.to = h.short
+    else groups.push({ from: h.short, to: h.short, open: h.open, close: h.close })
+  }
+  return groups.map((g) => {
+    const days = g.from === g.to ? g.from : `${g.from} – ${g.to}`
+    if (!g.open || !g.close) return `${days} geschlossen`
+    return `${days} ${formatTime(g.open).replace(' Uhr', '')} – ${formatTime(g.close)}`
+  })
+}

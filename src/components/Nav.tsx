@@ -1,67 +1,71 @@
-import { motion, useMotionValueEvent, useScroll } from 'motion/react'
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import { BOOKING_URL } from '../data/salon'
 import { cn } from '../lib/cn'
-import { EASE_OUT_EXPO } from '../lib/motion'
-import { BookButton } from './BookButton'
-import { Logo } from './Logo'
-
-const links = [
-  { href: '#leistungen', label: 'Preise' },
-  { href: '#team', label: 'Team' },
-  { href: '#kontakt', label: 'Kontakt' },
-]
+import { lockScroll, unlockScroll } from '../lib/scroll'
+import { Menu } from './Menu'
 
 export function Nav() {
-  const { scrollY } = useScroll()
-  const [hidden, setHidden] = useState(false)
-  const [scrolled, setScrolled] = useState(false)
+  const [open, setOpen] = useState(false)
+  const toggle = useRef<HTMLButtonElement>(null)
 
-  useMotionValueEvent(scrollY, 'change', (y) => {
-    const previous = scrollY.getPrevious() ?? 0
-    setScrolled(y > 24)
-    setHidden(y > previous && y > 480)
-  })
+  useEffect(() => {
+    if (!open) return
+    const button = toggle.current
+    lockScroll()
+    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && setOpen(false)
+    window.addEventListener('keydown', onKey)
+    return () => {
+      window.removeEventListener('keydown', onKey)
+      unlockScroll()
+      button?.focus()
+    }
+  }, [open])
 
   return (
-    <motion.header
-      initial={{ y: '-100%' }}
-      animate={{ y: hidden ? '-100%' : '0%' }}
-      transition={{ duration: 0.7, ease: EASE_OUT_EXPO }}
-      className="fixed inset-x-0 top-0 z-50"
-    >
-      <div
-        aria-hidden="true"
-        className={cn(
-          'pointer-events-none absolute inset-0 -bottom-6 bg-linear-to-b from-ink/90 via-ink/60 to-transparent transition-opacity duration-500',
-          scrolled ? 'opacity-100' : 'opacity-0',
-        )}
-      />
-      <div className="relative mx-auto flex max-w-[1600px] items-center justify-between gap-4 px-5 py-4 md:px-10 md:py-5">
-        <a href="#top" className="flex items-center gap-3" aria-label="Amin B. Ahmadi – zum Seitenanfang">
-          <Logo className="size-10 text-bone" label="" />
-          <span className="hidden text-sm font-medium tracking-tight sm:block">
+    <>
+      {/* mix-blend-difference: die Leiste bleibt auf hellen, dunklen und Bild-Flächen lesbar */}
+      <header className="fixed inset-x-0 top-0 z-50 text-paper mix-blend-difference">
+        <div className="grid grid-cols-[1fr_auto_1fr] items-center px-4 py-5 md:px-8 md:py-6">
+          <button
+            ref={toggle}
+            type="button"
+            onClick={() => setOpen((o) => !o)}
+            aria-expanded={open}
+            aria-controls="menu"
+            aria-label={open ? 'Menü schließen' : 'Menü öffnen'}
+            className="relative -m-2 size-10 cursor-pointer justify-self-start"
+          >
+            <span
+              className={cn(
+                'absolute top-1/2 left-2 h-[2px] w-6 bg-current transition-transform duration-500 ease-out-expo',
+                open ? 'rotate-45' : '-translate-y-[5px]',
+              )}
+            />
+            <span
+              className={cn(
+                'absolute top-1/2 left-2 h-[2px] w-6 bg-current transition-transform duration-500 ease-out-expo',
+                open ? '-rotate-45' : 'translate-y-[5px]',
+              )}
+            />
+          </button>
+
+          <a href="#top" onClick={() => setOpen(false)} className="display text-[13px] tracking-[0.14em] md:text-[15px]">
             Amin B. Ahmadi
-            <span className="block font-mono text-[10px] font-normal uppercase tracking-[0.2em] text-ash">Barber · Friseur</span>
-          </span>
-        </a>
+          </a>
 
-        <nav aria-label="Hauptnavigation" className="absolute left-1/2 hidden -translate-x-1/2 md:block">
-          <ul className="flex items-center gap-1 rounded-full border border-white/10 bg-ink/40 p-1 backdrop-blur-xl">
-            {links.map((l) => (
-              <li key={l.href}>
-                <a
-                  href={l.href}
-                  className="block rounded-full px-4 py-2 text-sm text-bone/70 transition-colors hover:bg-white/8 hover:text-bone"
-                >
-                  {l.label}
-                </a>
-              </li>
-            ))}
-          </ul>
-        </nav>
+          <a
+            href={BOOKING_URL}
+            target="_blank"
+            rel="noopener"
+            className="display justify-self-end text-[13px] transition-opacity hover:opacity-60 md:text-[15px]"
+          >
+            <span className="md:hidden">Termin</span>
+            <span className="hidden md:inline">Termin buchen</span>
+          </a>
+        </div>
+      </header>
 
-        <BookButton />
-      </div>
-    </motion.header>
+      <Menu open={open} onClose={() => setOpen(false)} />
+    </>
   )
 }
