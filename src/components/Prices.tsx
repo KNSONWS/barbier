@@ -98,7 +98,9 @@ function Category({ category, open, onToggle }: { category: ServiceCategory; ope
 }
 
 export function Prices() {
-  const [open, setOpen] = useState<string | null>(services[0].key)
+  // Kategorien klappen unabhängig voneinander auf — so springt beim Öffnen nichts nach oben weg
+  const [open, setOpen] = useState<string[]>([services[0].key])
+  const toggle = (key: string) => setOpen((keys) => (keys.includes(key) ? keys.filter((k) => k !== key) : [...keys, key]))
 
   return (
     <section id="preise" className="border-t border-ink/10 px-4 py-24 md:px-8 md:py-36">
@@ -110,7 +112,7 @@ export function Prices() {
 
       <div className="mt-10 border-t border-ink md:mt-14">
         {services.map((c) => (
-          <Category key={c.key} category={c} open={open === c.key} onToggle={() => setOpen(open === c.key ? null : c.key)} />
+          <Category key={c.key} category={c} open={open.includes(c.key)} onToggle={() => toggle(c.key)} />
         ))}
       </div>
     </section>
